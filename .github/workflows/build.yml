@@ -1,0 +1,59 @@
+name: Compilar Fluento (Mac + Windows)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalar dependencias
+        run: |
+          pip install pyinstaller pillow
+          pip install -r requirements.txt
+      - name: Compilar
+        run: |
+          pyinstaller --onedir --windowed \
+            --name "Fluento" \
+            --add-data "assets:assets" \
+            --add-data "server:server" \
+            --add-data "client:client" \
+            launcher.py
+      - name: Empaquetar
+        run: cd dist && zip -rq Fluento-Mac.zip Fluento.app
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Fluento-Mac
+          path: dist/Fluento-Mac.zip
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalar dependencias
+        run: |
+          pip install pyinstaller pillow
+          pip install -r requirements.txt
+      - name: Compilar
+        run: |
+          pyinstaller --onedir --windowed `
+            --name "Fluento" `
+            --add-data "assets;assets" `
+            --add-data "server;server" `
+            --add-data "client;client" `
+            launcher.py
+      - name: Empaquetar
+        run: cd dist && Compress-Archive -Path Fluento -DestinationPath Fluento-Windows.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Fluento-Windows
+          path: dist/Fluento-Windows.zip
