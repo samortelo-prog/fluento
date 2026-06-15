@@ -1,0 +1,5 @@
+cd ~/Downloads/Fluento/"_sistema (no tocar)"
+
+git add .github/
+git commit -m "Agregar GitHub Actions workflow"
+git push origin main
