@@ -19,7 +19,7 @@ jobs:
           pip install -r requirements.txt
       - name: Compilar
         run: |
-          pyinstaller --onedir --windowed \
+          pyinstaller --onedir --windowed --clean -y \
             --name "Fluento" \
             --add-data "assets:assets" \
             --add-data "server:server" \
@@ -45,7 +45,7 @@ jobs:
           pip install -r requirements.txt
       - name: Compilar
         run: |
-          pyinstaller --onedir --windowed `
+          pyinstaller --onedir --windowed --clean -y `
             --name "Fluento" `
             --add-data "assets;assets" `
             --add-data "server;server" `
