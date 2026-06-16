@@ -157,7 +157,8 @@ def ensure_env() -> dict:
     env = read_env()
     env.setdefault("JWT_SECRET", secrets.token_hex(32))
     env.setdefault("ADMIN_API_KEY", secrets.token_hex(32))
-    env.setdefault("DATABASE_URL", "sqlite:///./translator.db")
+    db_path = str(PROJECT_ROOT / "translator.db")
+    env["DATABASE_URL"] = f"sqlite:///{db_path}"
     env.setdefault("TRANSLATION_MODEL", "llama-3.3-70b-versatile")
     env.setdefault("ADMIN_EMAIL", ADMIN_EMAIL_DEFAULT)
 
@@ -178,7 +179,7 @@ def start_server(env: dict) -> subprocess.Popen | None:
     try:
         proc = subprocess.Popen(
             cmd, cwd=PROJECT_ROOT, env=full_env,
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            stdout=None, stderr=None,
         )
     except Exception as e:
         print(f"Error iniciando servidor: {e}")
